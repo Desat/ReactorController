@@ -1,4 +1,4 @@
-local version = "0.51"
+local version = "0.52"
 local tag = "reactorConfig"
 --[[
 Program made by DrunkenKas
@@ -225,13 +225,13 @@ local function format(num)
     elseif (num >= 1000000) then
         return string.format("%7.3f M", num / 1000000)
     elseif (num >= 1000) then
-        return string.format("%7.3f K", num / 1000)
+        return string.format("%7.3f k", num / 1000)
     elseif (num >= 1) then
         return string.format("%7.3f ", num)
     elseif (num >= .001) then
         return string.format("%7.3f m", num * 1000)
     elseif (num >= .000001) then
-        return string.format("%7.3f u", num * 1000000)
+        return string.format("%7.3f %s", num * 1000000, string.char(181))
     else
         return string.format("%7.3f ", 0)
     end
@@ -292,9 +292,13 @@ end
 local function addGraphButtons()
     offy = oo - 14
     for i,v in pairs(graphs) do
+        print(i)
         addButt(v, function() toggleGraph(v) end, {20, 3},
-                dim + 7, offy + i * 3 - 1,
-                colors.red, colors.lime)
+            dim + 7, offy + i * 3 - 1,
+            colors.red, colors.lime)
+        --addButt(v, function() toggleGraph(v) end, {14, 3},
+        --    dim + 16, offy + i * 3 - 1,
+        --    colors.red, colors.lime)
         if (graphsToDraw[v] ~= nil) then
             t:toggleButton(v, true)
         end
@@ -698,11 +702,13 @@ local function updateStats()
         local bat = reactor.getEnergyStats()
         local fuel = reactor.getFuelStats()
 
+        local test1 = reactor.getFuelAmount()
+
         storedThisTick = bat.energyStored
         lastRFT = bat.energyProducedLastTick
         capacity = bat.energyCapacity
         rod = reactor.getControlRodLevel(0)
-        fuelUsage = fuel.fuelConsumedLastTick / 1000
+        fuelUsage = fuel.fuelConsumedLastTick  -- <--------------
         waste = reactor.getWasteAmount()
         fuelTemp = reactor.getFuelTemperature()
         caseTemp = reactor.getCasingTemperature()
