@@ -698,20 +698,6 @@ local function updateStats()
         caseTemp = reactor.getCasingTemperature()
         -- Big Reactors doesn't give us a way to directly query RF capacity through CC APIs
         capacity = math.max(capacity, reactor.getEnergyStored)
-    elseif (reactorVersion == "Extreme Reactors") then
-        local bat = reactor.getEnergyStats()
-        local fuel = reactor.getFuelStats()
-
-        local test1 = reactor.getFuelAmount()
-
-        storedThisTick = bat.energyStored
-        lastRFT = bat.energyProducedLastTick
-        capacity = bat.energyCapacity
-        rod = reactor.getControlRodLevel(0)
-        fuelUsage = fuel.fuelConsumedLastTick  -- <--------------
-        waste = reactor.getWasteAmount()
-        fuelTemp = reactor.getFuelTemperature()
-        caseTemp = reactor.getCasingTemperature()
     elseif (reactorVersion == "Bigger Reactors") then
         storedThisTick = reactor.battery().stored()
         lastRFT = reactor.battery().producedLastTick()
@@ -721,6 +707,17 @@ local function updateStats()
         waste = reactor.fuelTank().waste()
         fuelTemp = reactor.fuelTemperature()
         caseTemp = reactor.casingTemperature()
+	elseif (reactorVersion == "Extreme Reactors") then
+        local bat = reactor.getEnergyStats()
+        local fuel = reactor.getFuelStats()
+        storedThisTick = bat.energyStored
+        lastRFT = bat.energyProducedLastTick
+        capacity = bat.energyCapacity
+        rod = reactor.getControlRodLevel(0)
+        fuelUsage = fuel.fuelConsumedLastTick
+        waste = reactor.getWasteAmount()
+        fuelTemp = reactor.getFuelTemperature()
+        caseTemp = reactor.getCasingTemperature()
     end
     rfLost = lastRFT + storedLastTick - storedThisTick
     -- Add the values to the arrays
